@@ -1,11 +1,14 @@
+// lib/screens/job_list_screen.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/job_provider.dart';
 import '../providers/user_provider.dart';
 import '../models/job_model.dart';
+import '../widgets/animated_job_card.dart';
 import 'job_detail_screen.dart';
 import 'add_job_screen.dart';
 import 'login_screen.dart';
+import 'my_applications_screen.dart';
 
 class JobListScreen extends StatefulWidget {
   const JobListScreen({Key? key}) : super(key: key);
@@ -43,8 +46,30 @@ class _JobListScreenState extends State<JobListScreen> {
         actions: [
           Consumer<UserProvider>(
             builder: (context, userProvider, child) {
+              // Show applications button for job seekers
+              if (userProvider.currentUser != null &&
+                  !userProvider.isRecruiter) {
+                return IconButton(
+                  icon: const Icon(Icons.history),
+                  tooltip: 'My Applications',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MyApplicationsScreen(),
+                      ),
+                    );
+                  },
+                );
+              }
+              return const SizedBox.shrink();
+            },
+          ),
+          Consumer<UserProvider>(
+            builder: (context, userProvider, child) {
               return IconButton(
                 icon: const Icon(Icons.logout),
+                tooltip: 'Logout',
                 onPressed: () async {
                   await userProvider.signOut();
                   // Navigate back to login screen
@@ -74,13 +99,29 @@ class _JobListScreenState extends State<JobListScreen> {
             itemCount: jobProvider.jobs.length,
             itemBuilder: (context, index) {
               final job = jobProvider.jobs[index];
-              return _buildJobCard(context, job);
+              return AnimatedJobCard(
+                job: job,
+                index: index,
+                onTap: () {
+                  // Select job and navigate to detail
+                  jobProvider.selectJob(job);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => JobDetailScreen(jobId: job.id),
+                    ),
+                  );
+                },
+              );
             },
           );
         },
       ),
       floatingActionButton: Consumer<UserProvider>(
         builder: (context, userProvider, child) {
+          // Debug log to verify role detection
+          print('Current user role is recruiter: ${userProvider.isRecruiter}');
+
           // Only show add job button for recruiters
           if (userProvider.isRecruiter) {
             return FloatingActionButton(
@@ -97,63 +138,6 @@ class _JobListScreenState extends State<JobListScreen> {
           }
           return const SizedBox.shrink();
         },
-      ),
-    );
-  }
-
-  Widget _buildJobCard(BuildContext context, Job job) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      elevation: 2,
-      child: InkWell(
-        onTap: () {
-          // Select job and navigate to detail
-          Provider.of<JobProvider>(context, listen: false).selectJob(job);
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => JobDetailScreen(jobId: job.id),
-            ),
-          );
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                job.title,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                job.company,
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.blue,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Row(
-                children: [
-                  const Icon(Icons.location_on, size: 16),
-                  const SizedBox(width: 4),
-                  Text(job.location),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Text(
-                job.description.length > 100
-                    ? '${job.description.substring(0, 100)}...'
-                    : job.description,
-                style: const TextStyle(color: Colors.grey),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

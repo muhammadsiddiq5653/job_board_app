@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'providers/user_provider.dart';
 import 'providers/job_provider.dart';
+import 'providers/application_provider.dart';
 import 'screens/splash_screen.dart';
 
 void main() async {
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => JobProvider()),
+        ChangeNotifierProvider(create: (_) => ApplicationProvider()),
       ],
       child: MaterialApp(
         title: 'Job Board App',

@@ -159,6 +159,14 @@ Basic authentication is implemented with hardcoded credentials. In a production 
    - Secure user authentication
    - Role-based access control
 
+5. **Job Application System**:
+   - Users can apply for jobs with a single tap
+   - Application status tracking (pending, reviewed, interviewed, accepted, rejected)
+   - Prevention of duplicate applications for the same job
+   - "My Applications" screen to view all submitted applications
+   - Different UI states for apply button (normal, loading, already applied)
+   - Role-based restrictions (recruiters cannot apply for jobs)
+
 ## Deployment Instructions
 
 ### Building APK for Android

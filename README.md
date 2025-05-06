@@ -22,16 +22,50 @@ A simple job board mobile application built with Flutter where users can view av
 ### Firebase Setup
 
 1. Create a new Firebase project in the [Firebase Console](https://console.firebase.google.com/)
-2. Add Android and iOS apps to your Firebase project
-    - Follow the setup instructions for each platform
-    - Download and add the configuration files (google-services.json for Android, GoogleService-Info.plist for iOS)
-3. Enable Firebase Authentication
-    - In the Firebase Console, go to Authentication > Sign-in method
-    - Enable Email/Password authentication
-4. Set up Cloud Firestore
-    - In the Firebase Console, go to Firestore Database
-    - Create a new database in production mode
-    - Choose a location closest to your users
+
+2. Install the Firebase CLI:
+```bash
+npm install -g firebase-tools
+```
+
+3. Login to Firebase from the CLI:
+```bash
+firebase login
+```
+
+4. Initialize Firebase in your Flutter project:
+```bash
+# Navigate to your project directory
+cd job_board_app
+
+# Initialize Firebase
+firebase init
+```
+- Select the services you need (Firestore, Authentication, Hosting if needed)
+- Choose your Firebase project
+- Accept the default file locations
+
+5. Add Flutter Firebase configuration:
+```bash
+# Install FlutterFire CLI
+dart pub global activate flutterfire_cli
+
+# Configure your Flutter app with Firebase
+flutterfire configure --project=your-firebase-project-id
+```
+
+6. Add Android and iOS apps to your Firebase project through the CLI or Console
+   - For CLI: Follow the prompts during `flutterfire configure`
+   - For Console: Add apps manually and download configuration files
+
+7. Enable Firebase Authentication
+   - In the Firebase Console, go to Authentication > Sign-in method
+   - Enable Email/Password authentication
+
+8. Set up Cloud Firestore
+   - In the Firebase Console, go to Firestore Database
+   - Create a new database in production mode
+   - Choose a location closest to your users
 
 ### Installation
 
@@ -104,13 +138,26 @@ For this demo, we use a mock backend with hardcoded data. In a real-world scenar
 
 Basic authentication is implemented with hardcoded credentials. In a production app, you would use Firebase Authentication or a secure authentication service.
 
-## Future Improvements
+## Enhanced Features
 
-- Add profile pages for users
-- Implement job application tracking
-- Add search and filter functionality
-- Enhance UI with more animations
-- Add push notifications for new job posts
+1. **Country Picker**:
+   - Integrated the `country_picker` package for a better user experience when selecting job locations
+   - Users can browse or search for countries with visual flags and proper names
+
+2. **Splash Screen**:
+   - Added an animated splash screen that appears on app startup
+   - Provides visual feedback while the app initializes
+   - Smooth transitions between screens
+
+3. **Animations**:
+   - Job listings use fade-in and slide animations for a more polished UI
+   - Animated card components for a modern look and feel
+   - Transition animations between screens
+
+4. **Firebase Integration**:
+   - Real-time data updates with Firestore
+   - Secure user authentication
+   - Role-based access control
 
 ## Deployment Instructions
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:country_picker/country_picker.dart';
 import '../models/job_model.dart';
 import '../providers/job_provider.dart';
 import '../providers/user_provider.dart';
@@ -80,18 +81,46 @@ class _AddJobScreenState extends State<AddJobScreen> {
                 },
               ),
               const SizedBox(height: 16),
-              TextFormField(
-                controller: _locationController,
-                decoration: const InputDecoration(
-                  labelText: 'Location',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a location';
-                  }
-                  return null;
+              InkWell(
+                onTap: () {
+                  showCountryPicker(
+                    context: context,
+                    showPhoneCode: false,
+                    countryListTheme: CountryListThemeData(
+                      borderRadius: BorderRadius.circular(10),
+                      inputDecoration: InputDecoration(
+                        labelText: 'Search country',
+                        hintText: 'Start typing to search',
+                        prefixIcon: const Icon(Icons.search),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.blue.withOpacity(0.2),
+                          ),
+                        ),
+                      ),
+                    ),
+                    onSelect: (Country country) {
+                      setState(() {
+                        _locationController.text = country.name;
+                      });
+                    },
+                  );
                 },
+                child: TextFormField(
+                  controller: _locationController,
+                  decoration: InputDecoration(
+                    labelText: 'Location',
+                    border: const OutlineInputBorder(),
+                    suffixIcon: const Icon(Icons.arrow_drop_down),
+                  ),
+                  enabled: false, // Disable direct editing
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please select a location';
+                    }
+                    return null;
+                  },
+                ),
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -117,45 +146,42 @@ class _AddJobScreenState extends State<AddJobScreen> {
                       onPressed: jobProvider.isLoading
                           ? null
                           : () async {
-                              if (_formKey.currentState!.validate()) {
-                                // Create a new job
-                                final newJob = Job(
-                                  id: DateTime.now()
-                                      .millisecondsSinceEpoch
-                                      .toString(),
-                                  title: _titleController.text,
-                                  company: _companyController.text,
-                                  location: _locationController.text,
-                                  description: _descriptionController.text,
-                                  postedBy: userProvider.currentUser?.id ?? '',
-                                );
+                        if (_formKey.currentState!.validate()) {
+                          // Create a new job
+                          final newJob = Job(
+                            id: DateTime.now().millisecondsSinceEpoch.toString(),
+                            title: _titleController.text,
+                            company: _companyController.text,
+                            location: _locationController.text,
+                            description: _descriptionController.text,
+                            postedBy: userProvider.currentUser?.id ?? '',
+                          );
 
-                                final success =
-                                    await jobProvider.addJob(newJob);
-                                if (success) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Job added successfully!'),
-                                    ),
-                                  );
-                                  Navigator.pop(context);
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Failed to add job'),
-                                    ),
-                                  );
-                                }
-                              }
-                            },
+                          final success = await jobProvider.addJob(newJob);
+                          if (success) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Job added successfully!'),
+                              ),
+                            );
+                            Navigator.pop(context);
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Failed to add job'),
+                              ),
+                            );
+                          }
+                        }
+                      },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         child: jobProvider.isLoading
                             ? const CircularProgressIndicator()
                             : const Text(
-                                'Post Job',
-                                style: TextStyle(fontSize: 16),
-                              ),
+                          'Post Job',
+                          style: TextStyle(fontSize: 16),
+                        ),
                       ),
                     ),
                   );

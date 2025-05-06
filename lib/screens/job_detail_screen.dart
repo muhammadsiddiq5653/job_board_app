@@ -21,15 +21,6 @@ class _JobDetailScreenState extends State<JobDetailScreen> {
     );
   }
 
-  // Format date for display
-  String _formatDate(DateTime date) {
-    final month = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
-    ][date.month - 1];
-
-    return '$month ${date.day}, ${date.year}';
-  }
 
   @override
   Widget build(BuildContext context) {

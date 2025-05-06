@@ -31,7 +31,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> _initializeDemoAccounts() async {
     // Get auth service instance
-    final authService = Provider.of<UserProvider>(context, listen: false).authService;
+    final authService =
+        Provider.of<UserProvider>(context, listen: false).authService;
     await authService.addDemoUsers();
   }
 
@@ -99,47 +100,58 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: userProvider.isLoading
                         ? null
                         : () async {
-                      if (_formKey.currentState!.validate()) {
-                        try {
-                          final success = await userProvider.signIn(
-                            _usernameController.text,
-                            _passwordController.text,
-                          );
-                          if (success) {
-                            // Navigate to job list page
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const JobListScreen(),
-                              ),
-                            );
-                          } else {
-                            // Show error
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Invalid credentials. Please check your email and password.'),
-                              ),
-                            );
-                          }
-                        } catch (e) {
-                          // Handle specific Firebase Auth errors
-                          String errorMessage = 'An error occurred. Please try again.';
-                          if (e.toString().contains('user-not-found')) {
-                            errorMessage = 'No user found with this email.';
-                          } else if (e.toString().contains('wrong-password')) {
-                            errorMessage = 'Incorrect password.';
-                          } else if (e.toString().contains('invalid-email')) {
-                            errorMessage = 'Invalid email format.';
-                          } else if (e.toString().contains('user-disabled')) {
-                            errorMessage = 'This account has been disabled.';
-                          }
+                            if (_formKey.currentState!.validate()) {
+                              try {
+                                final success = await userProvider.signIn(
+                                  _usernameController.text,
+                                  _passwordController.text,
+                                );
+                                if (success) {
+                                  // Navigate to job list page
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const JobListScreen(),
+                                    ),
+                                  );
+                                } else {
+                                  // Show error
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          'Invalid credentials. Please check your email and password.'),
+                                    ),
+                                  );
+                                }
+                              } catch (e) {
+                                // Handle specific Firebase Auth errors
+                                String errorMessage =
+                                    'An error occurred. Please try again.';
+                                if (e.toString().contains('user-not-found')) {
+                                  errorMessage =
+                                      'No user found with this email.';
+                                } else if (e
+                                    .toString()
+                                    .contains('wrong-password')) {
+                                  errorMessage = 'Incorrect password.';
+                                } else if (e
+                                    .toString()
+                                    .contains('invalid-email')) {
+                                  errorMessage = 'Invalid email format.';
+                                } else if (e
+                                    .toString()
+                                    .contains('user-disabled')) {
+                                  errorMessage =
+                                      'This account has been disabled.';
+                                }
 
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(errorMessage)),
-                          );
-                        }
-                      }
-                    },
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(errorMessage)),
+                                );
+                              }
+                            }
+                          },
                     child: userProvider.isLoading
                         ? const CircularProgressIndicator()
                         : const Text('Login'),
@@ -153,7 +165,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   // This would be implemented in a real app
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('Sign up functionality would be implemented in a complete app'),
+                      content: Text(
+                          'Sign up functionality would be implemented in a complete app'),
                     ),
                   );
                 },

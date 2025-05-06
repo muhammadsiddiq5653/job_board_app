@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "461170860500",
+    "project_id": "jobboard-2f2d6",
+    "storage_bucket": "jobboard-2f2d6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:461170860500:android:e8c4bd149f6ff2c3a07641",
+        "android_client_info": {
+          "package_name": "com.example.job_board_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4UM8bZd7lOM7El6w2NxkGDrMDKeElC5E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
